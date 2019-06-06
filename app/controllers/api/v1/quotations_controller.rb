@@ -4,4 +4,9 @@ class Api::V1::QuotationsController < Api::V1::ApiController
   	quotations = QuotationsByDateService.quotations_of(params[:moment], params[:currency_code])
     render json: {quotations: quotations}, status: 200
   end
+
+  def variation
+  	variation = QuotationsByDateService.quotations_variation(params[:moment], params[:currency_code])
+  	render json: {variation: variation}, status: 200
+  end
 end

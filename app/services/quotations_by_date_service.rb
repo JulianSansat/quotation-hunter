@@ -4,6 +4,10 @@ class QuotationsByDateService
         get_quotations_of(moment, code)
     end
 
+    def self.quotations_variation(moment, code)
+        get_quotations_variation
+    end
+
     private
 
     def self.get_quotations_of(moment, code)
@@ -19,11 +23,90 @@ class QuotationsByDateService
         elsif(moment == 'last_month')
             quotations = Quotation.
                             where(
-                                "created_at > ? AND created_at <= ? AND currency_code = ?", 
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
                                 Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
                             )
         else
             quotations = Quotation.all
         end
     end
+
+    def self.get_quotations_variation(moment, code)
+        if(moment == 'yesterday')
+
+            first = Quotation.
+                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).order(:created_at).first
+
+            last = Quotation.
+                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).order(:created_at).last
+
+            max = Quotation.
+                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).maximum(:buy)
+
+            min = Quotation.
+                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).minumum(:buy)
+
+        elsif(moment == 'last_week')
+
+            first = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_week.beginning_of_week.beginning_of_day, Date.current.beginning_of_week, code
+                            ).order(:created_at).first.buy
+
+            last = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_week.beginning_of_week.beginning_of_day, Date.current.beginning_of_week, code
+                            ).order(:created_at).last.buy
+
+            max = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_week.beginning_of_week.beginning_of_day, Date.current.beginning_of_week, code
+                            ).maximum(:buy)
+            min = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_week.beginning_of_week.beginning_of_day, Date.current.beginning_of_week, code
+                            ).minumum(:buy)
+        elsif(moment == 'last_month')
+
+            first = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
+                            ).order(:created_at).first.buy
+
+            last = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
+                            ).order(:created_at).last.buy
+
+            max = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
+                            ).maximum(:buy)
+            min = Quotation.
+                            where(
+                                "created_at > ? AND created_at < ? AND currency_code = ?", 
+                                Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
+                            ).minimum(:buy)
+        end
+        variation = calculate_variation_percentual(max, min)
+        symbol = first > last ? "-" : "+" 
+        variation_data = {
+            'variation' => variation,
+            'first'     => first,
+            'last'      => last,
+            'symbol'    => symbol
+        }
+    end
+
+    def self.calculate_variation_percentual(max, min)
+        ((max - min)/min) * 100
+    end 
+
 end

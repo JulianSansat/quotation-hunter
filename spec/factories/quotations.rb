@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :quotation do
     currency_code { "MyString" }
-    buy { 1 }
-    sell { 1 }
+    buy { Faker::Number.number(7) }
+    sell { Faker::Number.number(7) }
   end
 end

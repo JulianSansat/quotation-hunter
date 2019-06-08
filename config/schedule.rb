@@ -8,7 +8,7 @@ set :environment, ENV["RAILS_ENV"]
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"
-every 1.minute do
+every 1.hour do
   rake "fetch_quotations:fetch"
 end
 # every 2.hours do

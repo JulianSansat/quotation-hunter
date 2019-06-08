@@ -121,9 +121,14 @@ RSpec.describe 'Quotations API', type: :request do
 
     describe 'fetch quotations from api' do
         before do
+            @before_count = Quotation.count
             get '/fetch_quotations'
         end
 
+        it 'saves quotations after fetch' do
+            expect(Quotation.count).not_to eq(@before_count)
+        end
+            
         it 'returns status code 200' do
             expect(response).to have_http_status(200)
         end

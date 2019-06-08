@@ -8,6 +8,14 @@ class QuotationsFetchService
 
     def self.fetch_quotations_api
         currency_codes = ['USD', 'EUR', 'BTC']
+        db_currencies = Currency.all
+        if (db_currencies.length > 0)
+            currency_codes = []
+            db_currencies.each do |db_currency|
+                currency_codes << db_currency.code
+            end
+        end
+
         response = RestClient.get "https://api.hgbrasil.com/finance?key=#{Rails.application.credentials.hg_api_key}"
 
         json_body = JSON.parse(response.body, symbolize_names: true)

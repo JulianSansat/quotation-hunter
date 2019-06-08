@@ -2,11 +2,13 @@
 #
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
+ENV.each { |k, v| env(k, v) }
 
+set :environment, ENV["RAILS_ENV"]
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"
-every :hour do
+every 1.minute do
   rake "fetch_quotations:fetch"
 end
 # every 2.hours do

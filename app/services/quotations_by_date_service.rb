@@ -10,10 +10,10 @@ class QuotationsByDateService
         if(moment == 'yesterday')
 
             first = Quotation.
-                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).order(:created_at).first.buy
+                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).order(:created_at).first
 
             last = Quotation.
-                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).order(:created_at).last.buy
+                            where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).order(:created_at).last
 
             max = Quotation.
                             where("DATE(created_at) = ? AND currency_code = ?", Date.current.yesterday, code).maximum(:buy)
@@ -27,13 +27,13 @@ class QuotationsByDateService
                             where(
                                 "created_at >= ? AND created_at < ? AND currency_code = ?", 
                                 Date.current.last_week.beginning_of_week.beginning_of_day, Date.current.beginning_of_week, code
-                            ).order(:created_at).first.buy
+                            ).order(:created_at).first
 
             last = Quotation.
                             where(
                                 "created_at >= ? AND created_at < ? AND currency_code = ?", 
                                 Date.current.last_week.beginning_of_week.beginning_of_day, Date.current.beginning_of_week, code
-                            ).order(:created_at).last.buy
+                            ).order(:created_at).last
 
             max = Quotation.
                             where(
@@ -51,13 +51,13 @@ class QuotationsByDateService
                             where(
                                 "created_at >= ? AND created_at < ? AND currency_code = ?", 
                                 Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
-                            ).order(:created_at).first.buy
+                            ).order(:created_at).first
 
             last = Quotation.
                             where(
                                 "created_at >= ? AND created_at < ? AND currency_code = ?", 
                                 Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
-                            ).order(:created_at).last.buy
+                            ).order(:created_at).last
 
             max = Quotation.
                             where(
@@ -70,8 +70,13 @@ class QuotationsByDateService
                                 Date.current.last_month.beginning_of_month.beginning_of_day, Date.current.beginning_of_month, code
                             ).minimum(:buy)
         end
-        openingPrice = first
-        closingPrice = last
+
+        if(first == nil || last == nil)
+            return variation_data = {}
+        end
+
+        openingPrice = first.buy
+        closingPrice = last.buy
         variation = calculate_variation_percentual(openingPrice, closingPrice)
         symbol = openingPrice > closingPrice ? "-" : "+" 
         variation_data = {

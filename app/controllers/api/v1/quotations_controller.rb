@@ -5,7 +5,12 @@ class Api::V1::QuotationsController < Api::V1::ApiController
 
   def variation
   	variation_data = QuotationsByDateService.quotations_variation(params[:moment], params[:currency_code])
-  	render json: {variation_data: variation_data}, status: 200
+  	if (variation_data.length > 0)
+      render json: {variation_data: variation_data}, status: 200  
+    else
+      render json: {msg: 'not enought records'}, status: 204
+    end
+      
   end
 
   def fetch_quotations

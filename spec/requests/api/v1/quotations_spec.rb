@@ -119,6 +119,18 @@ RSpec.describe 'Quotations API', type: :request do
 
     end
 
+    describe 'get yesterday currency variations with empty records' do 
+        before do
+            get '/variation', params: {
+                'currency_code' => 'USD',
+                'moment' => 'yesterday'
+            }
+        end
+        it 'should return 204' do
+            expect(response).to have_http_status(204)
+        end
+    end
+
     describe 'fetch quotations from api' do
         before do
             @before_count = Quotation.count

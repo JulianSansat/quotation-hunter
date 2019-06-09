@@ -8,7 +8,15 @@ class QuotationsByDateService
         get_quotations_variation(moment, code)
     end
 
+    def self.quotations_preview
+        get_quotations_preview
+    end
+
     private
+
+    def self.get_quotations_preview
+        quotations = Quotation.where("DATE(created_at) = ?", Date.current.yesterday)
+    end
 
     def self.get_quotations_of(moment, code)
         if(moment == 'yesterday')

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       get '/quotations', to: 'quotations#index'
       get '/variation', to: 'quotations#variation'
       get '/fetch_quotations', to: 'quotations#fetch_quotations'
+      get '/preview', to: 'quotations#preview'
     end
   end
 end

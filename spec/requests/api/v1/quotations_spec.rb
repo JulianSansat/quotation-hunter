@@ -146,6 +146,28 @@ RSpec.describe 'Quotations API', type: :request do
         end
     end
 
+    describe 'get last quotations' do
+        before do
+            before_last_day = Date.current-2
+            last_day = Date.current.yesterday.beginning_of_day
+
+            create(:quotation, created_at: before_last_day)
+            create(:quotation, created_at: last_day)
+            create(:quotation, created_at: last_day)
+            create(:quotation, created_at: last_day)
+            
+            get '/preview'
+        end
+
+        it 'returns 3 quotations created from yesterday' do
+            expect(json_body[:quotations].count).to eq(3)
+        end
+
+        it 'returns status code 200' do
+            expect(response).to have_http_status(200)
+        end
+    end
+
     describe 'get quotations of last day' do
         before do
             before_last_day = Date.current-2

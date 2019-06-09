@@ -1,5 +1,6 @@
 require 'rails_helper'
 require "time"
+require 'database_cleaner'
 
 RSpec.describe 'Quotations API', type: :request do
     let(:headers) do
@@ -10,6 +11,12 @@ RSpec.describe 'Quotations API', type: :request do
     end
 
     before { host! "localhost:3000/api/v1"}
+
+    before :each do
+        DatabaseCleaner.strategy = :truncation
+
+        DatabaseCleaner.clean
+    end
 
     describe 'get currency variation of last day' do
         before do
@@ -152,9 +159,12 @@ RSpec.describe 'Quotations API', type: :request do
             last_day = Date.current.yesterday.beginning_of_day
 
             create(:quotation, created_at: before_last_day)
-            create(:quotation, created_at: last_day)
-            create(:quotation, created_at: last_day)
-            create(:quotation, created_at: last_day)
+            currency_codes = ['USD', 'BTC', 'EUR']
+            currency_codes.each do |code|
+                create(:quotation, currency_code: code, created_at: last_day.beginning_of_day)
+                create(:quotation, currency_code: code, created_at: last_day.end_of_day)
+            end
+            
             
             get '/preview'
         end
@@ -168,7 +178,7 @@ RSpec.describe 'Quotations API', type: :request do
         end
     end
 
-    describe 'get quotations of last day' do
+    describe 'get quotations of last day by currency' do
         before do
             before_last_day = Date.current-2
             last_day = Date.current.yesterday.beginning_of_day
@@ -197,7 +207,7 @@ RSpec.describe 'Quotations API', type: :request do
 
     end
 
-    describe 'get quotations of last week' do
+    describe 'get quotations of last week by currency' do
         before do
             before_last_week = Date.current.last_month.beginning_of_month
             whithin_last_week = Date.current.last_week.beginning_of_week.end_of_day
@@ -226,7 +236,7 @@ RSpec.describe 'Quotations API', type: :request do
 
     end
 
-    describe 'get quotations of last month' do
+    describe 'get quotations of last month by currency' do
         before do
             before_last_month = Date.current-60
             whithin_last_month = Date.current.last_month.beginning_of_month.end_of_day
@@ -241,6 +251,96 @@ RSpec.describe 'Quotations API', type: :request do
             
             get '/quotations', params: {
                     'currency_code' => currency,
+                    'moment' => moment
+                }
+        end
+
+        it 'returns 3 quotations created from last month' do
+            expect(json_body[:quotations].count).to eq(3)
+        end
+
+        it 'returns status code 200' do
+            expect(response).to have_http_status(200)
+        end
+
+    end
+
+    describe 'get quotations of last day' do
+        before do
+            before_last_day = Date.current-2
+            last_day = Date.current.yesterday.beginning_of_day
+
+            create(:quotation, created_at: before_last_day)
+            currency_codes = ['USD', 'BTC', 'EUR']
+            currency_codes.each do |code|
+                create(:quotation, currency_code: code, created_at: last_day.beginning_of_day)
+                create(:quotation, currency_code: code, created_at: last_day.end_of_day)
+            end
+            
+            moment = 'yesterday'
+
+            get '/quotations', params: {
+                    'moment' => moment
+                }
+        end
+
+        it 'returns 3 quotations created from yesterday' do
+            expect(json_body[:quotations].count).to eq(3)
+        end
+
+        it 'returns status code 200' do
+            expect(response).to have_http_status(200)
+        end
+
+    end
+
+    describe 'get quotations of last week' do
+        before do
+            before_last_week = Date.current.last_month.beginning_of_month
+            whithin_last_week = Date.current.last_week.beginning_of_week.end_of_day
+
+            moment = 'last_week'
+        
+            currency_codes = ['USD', 'BTC', 'EUR']
+            currency_codes.each do |code|
+                create(:quotation, currency_code: code, created_at: whithin_last_week.beginning_of_day)
+                create(:quotation, currency_code: code, created_at: whithin_last_week.end_of_day)
+            end
+            create(:quotation, created_at: before_last_week)
+            create(:quotation)
+            
+            get '/quotations', params: {
+                    'moment' => moment
+                }
+        end
+
+        it 'returns 3 quotations created from last week' do
+            expect(json_body[:quotations].count).to eq(3)
+        end
+
+        it 'returns status code 200' do
+            expect(response).to have_http_status(200)
+        end
+
+    end
+
+    describe 'get quotations of last month' do
+        before do
+            before_last_month = Date.current-60
+            whithin_last_month = Date.current.last_month.beginning_of_month.end_of_day
+
+            moment = 'last_month'
+
+            currency_codes = ['USD', 'BTC', 'EUR']
+            currency_codes.each do |code|
+                create(:quotation, currency_code: code, created_at: whithin_last_month.beginning_of_day)
+                create(:quotation, currency_code: code, created_at: whithin_last_month.end_of_day)
+            end
+        
+            create(:quotation, created_at: before_last_month)
+            create(:quotation, )
+            
+            get '/quotations', params: {
                     'moment' => moment
                 }
         end

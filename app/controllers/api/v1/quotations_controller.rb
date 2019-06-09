@@ -1,7 +1,11 @@
 class Api::V1::QuotationsController < Api::V1::ApiController
   
   def index
-    quotations = QuotationsByDateService.quotations_of(params[:moment], params[:currency_code])
+    if(params[:currency_code].present?)
+      quotations = QuotationsByDateService.get_quotations_of_by_code(params[:moment], params[:currency_code])
+    else
+      quotations = QuotationsByDateService.get_quotations_of(params[:moment])
+    end
     render json: {quotations: quotations}, status: 200
   end
 

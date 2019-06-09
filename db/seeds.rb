@@ -16,8 +16,8 @@ Quotation.create(currency_code: 'USD', buy: 3850000, created_at: Date.current.ye
 Quotation.create(currency_code: 'EUR', buy: 4450000, created_at: Date.current.yesterday.beginning_of_day)
 Quotation.create(currency_code: 'EUR', buy: 4850000, created_at: Date.current.yesterday.end_of_day)
 
-Quotation.create(currency_code: 'BTC', buy: 2345000000, created_at: Date.current.yesterday.beginning_of_day)
-Quotation.create(currency_code: 'BTC', buy: 2385000000, created_at: Date.current.yesterday.end_of_day)
+Quotation.create(currency_code: 'BTC', buy: 28500000000, created_at: Date.current.yesterday.beginning_of_day)
+Quotation.create(currency_code: 'BTC', buy: 28900000000, created_at: Date.current.yesterday.end_of_day)
 
 #last week
 Quotation.create(currency_code: 'USD', buy: 3150000, created_at: Date.current.last_week.beginning_of_week.beginning_of_day)
@@ -26,8 +26,8 @@ Quotation.create(currency_code: 'USD', buy: 3650000, created_at: Date.current.la
 Quotation.create(currency_code: 'EUR', buy: 4450000, created_at: Date.current.last_week.beginning_of_week.beginning_of_day)
 Quotation.create(currency_code: 'EUR', buy: 3850000, created_at: Date.current.last_week.beginning_of_week.end_of_day)
 
-Quotation.create(currency_code: 'BTC', buy: 2045000000, created_at: Date.current.last_week.beginning_of_week.beginning_of_day)
-Quotation.create(currency_code: 'BTC', buy: 2485000000, created_at: Date.current.last_week.beginning_of_week.end_of_day)
+Quotation.create(currency_code: 'BTC', buy: 28200000000, created_at: Date.current.last_week.beginning_of_week.beginning_of_day)
+Quotation.create(currency_code: 'BTC', buy: 29500000000, created_at: Date.current.last_week.beginning_of_week.end_of_day)
 
 #last month
 
@@ -37,5 +37,5 @@ Quotation.create(currency_code: 'USD', buy: 4650000, created_at: Date.current.la
 Quotation.create(currency_code: 'EUR', buy: 3450000, created_at: Date.current.last_month.beginning_of_month.beginning_of_day)
 Quotation.create(currency_code: 'EUR', buy: 3250000, created_at: Date.current.last_month.beginning_of_month.end_of_day)
 
-Quotation.create(currency_code: 'BTC', buy: 1945000000, created_at: Date.current.last_month.beginning_of_month.beginning_of_day)
-Quotation.create(currency_code: 'BTC', buy: 1885000000, created_at: Date.current.last_month.beginning_of_month.end_of_day)
+Quotation.create(currency_code: 'BTC', buy: 29500000000, created_at: Date.current.last_month.beginning_of_month.beginning_of_day)
+Quotation.create(currency_code: 'BTC', buy: 29600000000, created_at: Date.current.last_month.beginning_of_month.end_of_day)

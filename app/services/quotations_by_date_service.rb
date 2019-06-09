@@ -28,6 +28,9 @@ class QuotationsByDateService
 
         result_hash = {}
         currency_codes.each do |code|
+            if(quotations[code] == nil)
+                return result_hash
+            end 
             openingPrice = quotations[code].first.buy
             closingPrice = quotations[code].last.buy
             variation = calculate_variation_percentual(openingPrice, closingPrice)
@@ -93,6 +96,9 @@ class QuotationsByDateService
 
         result_hash = {}
         currency_codes.each do |code|
+            if(quotations[code] == nil)
+                return result_hash
+            end 
             openingPrice = quotations[code].first.buy
             closingPrice = quotations[code].last.buy
             variation = calculate_variation_percentual(openingPrice, closingPrice)

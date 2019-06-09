@@ -32,7 +32,7 @@ class QuotationsByDateService
             closingPrice = quotations[code].last.buy
             variation = calculate_variation_percentual(openingPrice, closingPrice)
             symbol = openingPrice > closingPrice ? "-" : "+"
-            result_hash[code.to_sym] = {quotations: quotations[code]}
+            result_hash[code.to_sym] = {quotations: quotations[code].last}
             result_hash[code.to_sym][:variation] = variation
             result_hash[code.to_sym][:symbol] = symbol
         end
